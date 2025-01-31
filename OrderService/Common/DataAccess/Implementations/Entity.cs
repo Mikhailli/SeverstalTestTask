@@ -3,7 +3,7 @@ using Common.DataAccess.Interfaces;
 
 namespace Common.DataAccess.Implementations
 {
-    internal class Entity : IEntity
+    public class Entity : IEntity
     {
         [Key]
         public virtual int Id { get; set; }

@@ -4,23 +4,23 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Common.DataAccess.Interfaces
 {
-    internal interface IGenericRepository<TEntity> where TEntity : Entity
+    public interface IGenericRepository<TEntity> where TEntity : Entity
     {
-        TEntity? GetById(object? id);
+        public TEntity? GetById(object? id);
 
-        Task<TEntity?> GetByIdAsync(object? id);
+        public Task<TEntity?> GetByIdAsync(object? id);
 
-        IEnumerable<TEntity> GetAll();
+        public IEnumerable<TEntity> GetAll();
 
-        IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>>? filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        internal IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>>? filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>[]? includes = null, int? skip = null, int? take = null);
 
-        int GetCount(Expression<Func<TEntity, bool>>? predicate = null);
+        internal int GetCount(Expression<Func<TEntity, bool>>? predicate = null);
 
-        TEntity Add(TEntity entity);
+        internal TEntity Add(TEntity entity);
 
-        void Update(TEntity entity);
+        internal void Update(TEntity entity);
 
-        void Delete(TEntity entity);
+        internal void Delete(TEntity entity);
     }
 }

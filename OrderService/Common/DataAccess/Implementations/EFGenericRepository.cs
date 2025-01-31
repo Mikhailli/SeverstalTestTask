@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Common.DataAccess.Implementations;
 
-internal class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity
+public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity
 {
     protected readonly DbContext _dbContext;
     protected readonly DbSet<TEntity> _dbSet;

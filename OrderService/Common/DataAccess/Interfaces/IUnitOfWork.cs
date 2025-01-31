@@ -2,7 +2,7 @@
 
 namespace Common.DataAccess.Interfaces;
 
-internal interface IUnitOfWork : IDisposable
+public interface IUnitOfWork : IDisposable
 {
     int Commit();
 
