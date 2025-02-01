@@ -4,13 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Common.DataAccess.Implementations;
 
-public class OrderDbContext : DbContext
+public class OrderDbContext(DbContextOptions<OrderDbContext> options) : DbContext(options)
 {
-    public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) 
-    {
-        
-    }
-
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }

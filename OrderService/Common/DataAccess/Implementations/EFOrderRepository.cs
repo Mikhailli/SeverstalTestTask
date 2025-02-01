@@ -3,13 +3,9 @@ using Common.DataAccess.Models;
 
 namespace Common.DataAccess.Implementations;
 
-internal class EFOrderRepository : EFGenericRepository<Order>, IOrderRepository
+internal class EFOrderRepository(OrderDbContext context) : EFGenericRepository<Order>(context), IOrderRepository
 {
-    public EFOrderRepository(OrderDbContext context) : base(context)
-    {
-    }
-
-    public Order? CreateAndAdd(DateTime orderDate, DateTime storageUntil, string status, string? customerName, string? PhoneNumber, ICollection<OrderItem> items)
+    public Order CreateAndAdd(DateTime orderDate, DateTime storageUntil, string status, string? customerName, string? phoneNumber)
     {
         var order = new Order
         {
@@ -17,8 +13,7 @@ internal class EFOrderRepository : EFGenericRepository<Order>, IOrderRepository
             StorageUntil = storageUntil,
             Status = status,
             CustomerName = customerName,
-            PhoneNumber = PhoneNumber,
-            Items = items
+            PhoneNumber = phoneNumber
         };
 
         Add(order);
@@ -38,7 +33,7 @@ internal class EFOrderRepository : EFGenericRepository<Order>, IOrderRepository
         Update(order);
     }
 
-    public void AddItemToOrder(Order order, Product product)
+    public void AddProductToOrder(Order order, Product product)
     {
         var item = order.Items.FirstOrDefault(item => item.ProductId == product.Id);
         if (item is null)
@@ -54,7 +49,7 @@ internal class EFOrderRepository : EFGenericRepository<Order>, IOrderRepository
     }
 
 
-    public void RemoveItemFromOrder(Order order, Product product)
+    public void RemoveProductFromOrder(Order order, Product product)
     {
         var item = order.Items.FirstOrDefault(item => item.ProductId == product.Id);
         if (item is null)

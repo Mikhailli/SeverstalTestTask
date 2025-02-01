@@ -19,8 +19,8 @@ namespace Common.DataAccess.Interfaces
 
         internal TEntity Add(TEntity entity);
 
-        internal void Update(TEntity entity);
+        public void Update(TEntity entity);
 
-        internal void Delete(TEntity entity);
+        public void Delete(TEntity entity);
     }
 }

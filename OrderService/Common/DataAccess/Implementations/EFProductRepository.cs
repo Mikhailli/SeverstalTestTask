@@ -3,12 +3,8 @@ using Common.DataAccess.Models;
 
 namespace Common.DataAccess.Implementations;
 
-internal class EFProductRepository : EFGenericRepository<Product>, IProductRepository
+internal class EFProductRepository(OrderDbContext context) : EFGenericRepository<Product>(context), IProductRepository
 {
-    public EFProductRepository(OrderDbContext context) : base(context)
-    {
-    }
-
     public Product? CreateAndAdd(string article, string name, string? description, decimal price, int stockQuantity)
     {
         if (GetCount(product => product.Article == article && product.Name == name) > 0)

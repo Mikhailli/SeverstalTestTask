@@ -4,14 +4,9 @@ using ProductService.Services.Interfaces;
 
 namespace ProductService.Services.Implementations;
 
-public class OrderService : IOrderService
+public class OrderService(IOrderRepository orderRepository) : IOrderService
 {
-    private readonly IOrderRepository _orderRepository;
-
-    public OrderService(IOrderRepository orderRepository)
-    {
-        _orderRepository = orderRepository;
-    }
+    private readonly IOrderRepository _orderRepository = orderRepository;
 
     public async Task<Order> GetAsync(int id)
     {

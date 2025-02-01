@@ -1,23 +1,30 @@
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using OrderService;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddOpenApi();
+//builder.Services.AddSwaggerGen();
+
+var startup = new Startup();
+startup.ConfigureServices(builder.Services);
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(startup.ConfigureContainer);
 
 var app = builder.Build();
+startup.Configure(app, app.Environment);
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}*/
 
 app.Run();
