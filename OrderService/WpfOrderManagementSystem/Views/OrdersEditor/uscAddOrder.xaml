@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="WpfOrderManagementSystem.Views.OrdersEditor.uscAddOrder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfOrderManagementSystem.Views.OrdersEditor"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+             xmlns:orderseditor="clr-namespace:WpfOrderManagementSystem.ViewModels.OrdersEditor" 
+             d:DataContext="{d:DesignInstance Type=orderseditor:AddOrderViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/Common.xaml"/>
+                <ResourceDictionary Source="../../Styles/ExtendedNumericUpDown.xaml"/>
+                <ResourceDictionary Source="../../Styles/ComboBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource BigTextBlockStyle}"><Run Text="Заказы"/></TextBlock>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Название:"/></TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NewOrderItemViewModel.OrderDate}" Style="{StaticResource MediumTextBoxStyle}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Описание:"/></TextBlock>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NewOrderItemViewModel.StorageUntil}" Style="{StaticResource MediumTextBoxStyle}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Статус:"/></TextBlock>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NewOrderItemViewModel.Status}" Style="{StaticResource MediumTextBoxStyle}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Статус:"/></TextBlock>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NewOrderItemViewModel.CustomerName}" Style="{StaticResource MediumTextBoxStyle}"/>
+    </Grid>
+</UserControl>

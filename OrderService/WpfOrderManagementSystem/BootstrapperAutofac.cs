@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using WpfOrderManagementSystem.ViewModels.ProductsEditor;
 using WpfOrderManagementSystem.Services.Implementations;
 using WpfOrderManagementSystem.Services.Interfaces;
+using WpfOrderManagementSystem.ViewModels.OrdersEditor;
 
 namespace WpfOrderManagementSystem;
 
@@ -52,10 +53,14 @@ internal class BootstrapperAutofac
             .SingleInstance();
         builder.RegisterType<MainViewModel>();
         builder.RegisterType<ProductEditorViewModel>();
+        builder.RegisterType<AddOrderViewModel>();
+        builder.RegisterType<DeleteOrderViewModel>();
+        builder.RegisterType<EditOrderViewModel>();
+        builder.RegisterType<OrderEditorViewModel>();
 
+        RegisterServiceWithHttpClient<ServiceForOrderManagement, IServiceForOrderManagement>(builder);
         RegisterServiceWithHttpClient<ProductServiceForInformation, IProductServiceForInformation>(builder);
         RegisterServiceWithHttpClient<OrderServiceForInformation, IOrderServiceForInformation>(builder);
-        RegisterServiceWithHttpClient<ServiceForOrderManagement, IServiceForOrderManagement>(builder);
 
         Container = builder.Build();
     }

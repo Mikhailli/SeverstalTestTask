@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:WpfOrderManagementSystem.Views"
              xmlns:converters="clr-namespace:WpfOrderManagementSystem.Infrastructure.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             VerticalAlignment="Stretch" Panel.ZIndex="2">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

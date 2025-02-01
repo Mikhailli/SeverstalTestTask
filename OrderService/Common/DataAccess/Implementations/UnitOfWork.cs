@@ -6,9 +6,9 @@ using Tanneryd.BulkOperations.EFCore;
 
 namespace Common.DataAccess.Implementations;
 
-public class UnitOfWork(DbContext dbContext) : IUnitOfWork
+public class UnitOfWork(OrderDbContext dbContext) : IUnitOfWork
 {
-    private DbContext? _dbContext = dbContext;
+    private OrderDbContext? _dbContext = dbContext;
 
     public int Commit()
     {

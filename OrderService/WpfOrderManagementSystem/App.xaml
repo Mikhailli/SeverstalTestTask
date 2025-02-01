@@ -5,7 +5,9 @@
              xmlns:viewModels="clr-namespace:WpfOrderManagementSystem.ViewModels"
              xmlns:views="clr-namespace:WpfOrderManagementSystem.Views"
              xmlns:vmProducts="clr-namespace:WpfOrderManagementSystem.ViewModels.ProductsEditor"
-             xmlns:viewsProducts="clr-namespace:WpfOrderManagementSystem.Views.ProductsEditor">
+             xmlns:viewsProducts="clr-namespace:WpfOrderManagementSystem.Views.ProductsEditor"
+             xmlns:vmOrders="clr-namespace:WpfOrderManagementSystem.ViewModels.OrdersEditor"
+             xmlns:viewsOrders="clr-namespace:WpfOrderManagementSystem.Views.OrdersEditor">
     <Application.Resources>
         <DataTemplate DataType="{x:Type viewModels:MainViewModel}">
             <views:uscMain/>
@@ -13,6 +15,16 @@
 
         <DataTemplate DataType="{x:Type vmProducts:ProductEditorViewModel}">
             <viewsProducts:uscProductsEditor/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmOrders:AddOrderViewModel}">
+            <viewsOrders:uscAddOrder/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmOrders:EditOrderViewModel}">
+            <viewsOrders:uscEditOrder/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmOrders:OrderEditorViewModel}">
+            <viewsOrders:uscOrdersEditor/>
         </DataTemplate>
     </Application.Resources>
 </Application>

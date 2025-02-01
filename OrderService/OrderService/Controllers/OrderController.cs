@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Common.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.ApiRequestModels;
 using OrderService.Services.Interfaces;
@@ -21,7 +20,7 @@ public class OrderController(IOrderService orderService) : Controller
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteOrder([Required] int id)
+    public IActionResult Delete([Required] int id)
     {
         _orderService.DeleteOrder(id);
 

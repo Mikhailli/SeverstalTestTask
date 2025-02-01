@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using WpfOrderManagementSystem.Infrastructure;
-using WpfOrderManagementSystem.Models.Settings;
+using WpfOrderManagementSystem.ViewModels.OrdersEditor;
 using WpfOrderManagementSystem.ViewModels.ProductsEditor;
 
 namespace WpfOrderManagementSystem.ViewModels;
@@ -28,12 +28,14 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
-    public MainViewModel(AppSettings appSettings, ProductEditorViewModel productsEditorViewModel)
+    public MainViewModel(ProductEditorViewModel productsEditorViewModel, OrderEditorViewModel ordersEditorViewModel)
     {
-        EditorViewModels = new ObservableCollection<EditorViewModelBase>
-        {
+        EditorViewModels =
+        [
+            ordersEditorViewModel,
             productsEditorViewModel,
-        };
+            
+        ];
 
         foreach (var editor in EditorViewModels)
         {

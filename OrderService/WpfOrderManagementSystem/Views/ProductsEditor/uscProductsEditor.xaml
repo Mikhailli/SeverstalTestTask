@@ -49,6 +49,9 @@
         <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ProductItems}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" IsReadOnly="True">
+            <DataGrid.Style>
+                <Style TargetType="DataGrid" BasedOn="{StaticResource CustomDataGrid}"></Style>
+            </DataGrid.Style>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Width="*" Header="Наименование"/>
                 <DataGridTextColumn Binding="{Binding Article}" Width="*" Header="Артикул"/>
