@@ -2,5 +2,6 @@
 
 internal class AppSettings
 {
-    public string ApiBaseAddress { get; set; } = null!;
+    public string InformationServiceApiBaseAddress { get; set; } = null!;
+    public string OrderManagementServiceApiBaseAddress { get; set; } = null!;
 }

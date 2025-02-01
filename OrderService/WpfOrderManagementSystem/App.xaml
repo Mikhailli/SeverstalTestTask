@@ -2,8 +2,18 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WpfOrderManagementSystem"
+              xmlns:viewModels="clr-namespace:WpfOrderManagementSystem.ViewModels"
+              xmlns:views="clr-namespace:WpfOrderManagementSystem.Views"
+             xmlns:vmProducts="clr-namespace:WpfOrderManagementSystem.ViewModels.ProductsEditor"
+             xmlns:viewsProducts="clr-namespace:WpfOrderManagementSystem.Views.ProductsEditor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type viewModels:MainViewModel}">
+            <views:uscMain/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmProducts:ProductEditorViewModel}">
+            <viewsProducts:uscProductsEditor/>
+        </DataTemplate>
     </Application.Resources>
 </Application>
