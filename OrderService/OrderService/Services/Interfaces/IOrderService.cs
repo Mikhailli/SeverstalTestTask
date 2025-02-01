@@ -1,6 +1,6 @@
 ﻿using Common.DataAccess.Models;
 
-namespace ProductService.Services.Interfaces;
+namespace OrderService.Services.Interfaces;
 
 public interface IOrderService
 {
@@ -10,7 +10,5 @@ public interface IOrderService
 
     void ChangeStatus(int id, string status);
 
-    void AddProductToOrder(int id, int productId);
-
-    void RemoveProductFromOrder(int id, int productId);
+    void ChangeOrderItems(int id, ICollection<(int productId, int Quantity)> orderItems);
 }

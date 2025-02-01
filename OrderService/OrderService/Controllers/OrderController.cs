@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Common.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.ApiRequestModels;
-using ProductService.Services.Interfaces;
+using OrderService.Services.Interfaces;
 
 namespace OrderService.Controllers;
 
@@ -28,25 +29,16 @@ public class OrderController(IOrderService orderService) : Controller
     }
 
     [HttpPut]
-    [Route("addProduct/{id}/{productId}")]
-    public IActionResult AddProductToOrder([Required] int id, [Required] int productId)
+    [Route("{id}")]
+    public IActionResult ChangeOrderItems([Required] int id, [FromBody] ICollection<(int productId, int quantity)> parameters)
     {
-        _orderService.AddProductToOrder(id, productId);
+        _orderService.ChangeOrderItems(id, parameters);
 
         return NoContent();
     }
 
     [HttpPut]
-    [Route("removeProduct/{id}/{productId}")]
-    public IActionResult RemoveProductFromOrder([Required] int id, [Required] int productId)
-    {
-        _orderService.RemoveProductFromOrder(id, productId);
-
-        return NoContent();
-    }
-
-    [HttpPut]
-    [Route("changeStatus/{id}/{status}")]
+    [Route("{id}/{status}")]
     public IActionResult ChangeStatus([Required] int id, [Required] string status)
     {
         _orderService.ChangeStatus(id, status);

@@ -15,8 +15,6 @@ namespace WpfOrderManagementSystem
         {
             base.OnStartup(e);
 
-            var baseOath = Directory.GetCurrentDirectory();
-
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);

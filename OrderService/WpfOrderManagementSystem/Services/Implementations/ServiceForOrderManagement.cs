@@ -32,19 +32,6 @@ internal class ServiceForOrderManagement(HttpClient httpClient, ServiceForOrderM
         throw new Exception("Ошибка при добавлении заказа");
     }
 
-    public async Task AddProductToOrderAsync(int id, int productId)
-    {
-        var requestUrl = ServiceForOrderManagementApi.AddProductToOrder(_baseUrl, id, productId);
-
-        var response = await _httpClient.PutAsync(requestUrl, null);
-
-        if (response.IsSuccessStatusCode is false)
-        {
-            var responseString = response.Content.ReadAsStringAsync().Result;
-            throw new Exception("Ошибка при добавлении товара");
-        }
-    }
-
     public async Task ChangeStatusAsync(int id, string status)
     {
         var requestUrl = ServiceForOrderManagementApi.ChangeStatus(_baseUrl, id, status);
@@ -71,16 +58,18 @@ internal class ServiceForOrderManagement(HttpClient httpClient, ServiceForOrderM
         }
     }
 
-    public async Task RemoveProductFromOrderAsync(int id, int productId)
+    public async Task ChangeOrderItemsAsync(int id, ICollection<(int productId, int quantity)> orderItems)
     {
-        var requestUrl = ServiceForOrderManagementApi.RemoveProductFromOrder(_baseUrl, id, productId);
+        var requestUrl = ServiceForOrderManagementApi.ChangeOrderItems(_baseUrl, id);
 
-        var response = await _httpClient.PutAsync(requestUrl, null);
+        var jsonString = JsonConvert.SerializeObject(orderItems);
+        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync(requestUrl, content);
 
         if (response.IsSuccessStatusCode is false)
         {
             var responseString = response.Content.ReadAsStringAsync().Result;
-            throw new Exception("Ошибка при удалении товара");
+            throw new Exception("Ошибка при изменении заказа");
         }
     }
 }

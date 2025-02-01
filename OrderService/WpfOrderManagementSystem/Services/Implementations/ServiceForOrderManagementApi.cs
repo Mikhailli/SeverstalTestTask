@@ -10,7 +10,5 @@ internal class ServiceForOrderManagementApi
 
     public static string ChangeStatus(string baseUrl, int id, string status) => $"{baseUrl}/api/order/{id}/{status}";
 
-    public static string AddProductToOrder(string baseUrl, int id, int productId) => $"{baseUrl}/api/order/addProduct/{id}{productId}";
-
-    public static string RemoveProductFromOrder(string baseUrl, int id, int productId) => $"{baseUrl}/api/order/removeProduct/{id}{productId}";
+    public static string ChangeOrderItems(string baseUrl, int id) => $"{baseUrl}/api/order/{id}";
 }

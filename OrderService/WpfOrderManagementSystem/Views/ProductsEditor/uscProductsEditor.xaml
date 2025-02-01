@@ -47,7 +47,7 @@
         </Grid>
 
         <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ProductItems}"
-                  AutoGenerateColumns="False" IsEnabled="False"
+                  AutoGenerateColumns="False"
                   CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Width="*" Header="Наименование"/>

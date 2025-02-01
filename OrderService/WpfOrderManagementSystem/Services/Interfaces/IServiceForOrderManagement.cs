@@ -11,7 +11,5 @@ internal interface IServiceForOrderManagement
 
     Task ChangeStatusAsync(int id, string status);
 
-    Task AddProductToOrderAsync(int id, int productId);
-
-    Task RemoveProductFromOrderAsync(int id, int productId);
+    Task ChangeOrderItemsAsync(int id, ICollection<(int productId, int quantity)> orderItems);
 }

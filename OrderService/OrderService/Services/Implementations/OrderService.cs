@@ -1,6 +1,6 @@
 ﻿using Common.DataAccess.Interfaces;
 using Common.DataAccess.Models;
-using ProductService.Services.Interfaces;
+using OrderService.Services.Interfaces;
 
 namespace OrderService.Services.Implementations;
 
@@ -17,26 +17,6 @@ public class OrderService(IOrderRepository orderRepository, IProductRepository p
         _unitOfWork.Commit();
 
         return order;
-    }
-
-    public void AddProductToOrder(int id, int productId)
-    {
-        var orderToUpdate = _orderRepository.GetById(id);
-
-        if (orderToUpdate is null)
-        {
-            throw new Exception($"Заказ с идентификатором {id} не найден");
-        }
-
-        var productToAdd = _productRepository.GetById(productId);
-
-        if (productToAdd is null)
-        {
-            throw new Exception($"Товар с идентификатором {id} не найден");
-        }
-
-        _orderRepository.AddProductToOrder(orderToUpdate, productToAdd);
-        _unitOfWork.Commit();
     }
 
     public void ChangeStatus(int id, string status)
@@ -66,7 +46,7 @@ public class OrderService(IOrderRepository orderRepository, IProductRepository p
         _unitOfWork.Commit();
     }
 
-    public void RemoveProductFromOrder(int id, int productId)
+    public async void ChangeOrderItems(int id, ICollection<(int productId, int Quantity)> orderItems)
     {
         var orderToUpdate = _orderRepository.GetById(id);
 
@@ -75,14 +55,18 @@ public class OrderService(IOrderRepository orderRepository, IProductRepository p
             throw new Exception($"Заказ с идентификатором {id} не найден");
         }
 
-        var productToRemove = _productRepository.GetById(productId);
-
-        if (productToRemove is null)
+        orderToUpdate.Items.Clear();
+        foreach (var item in orderItems)
         {
-            throw new Exception($"Товар с идентификатором {id} не найден");
-        }
+            if (await _productRepository.GetByIdAsync(item.productId) is null)
+            {
+                throw new Exception($"Товар с идентификатором {item.productId} не найден");
+            }
 
-        _orderRepository.RemoveProductFromOrder(orderToUpdate, productToRemove);
+            var orderItem = new OrderItem() { OrderId = id, ProductId = item.productId, Quantity = item.Quantity };
+        }
+        _orderRepository.Update(orderToUpdate, orderToUpdate.OrderDate, orderToUpdate.StorageUntil,
+            orderToUpdate.Status, orderToUpdate.CustomerName, orderToUpdate.PhoneNumber, orderToUpdate.Items);
         _unitOfWork.Commit();
     }
 }
