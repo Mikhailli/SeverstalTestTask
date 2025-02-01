@@ -18,6 +18,11 @@ public class ProductController(IProductService productService) : Controller
         return Json(products);
     }
 
+    /// <summary>
+    /// Получает информацию о товаре по его идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор товара</param>
+    /// <returns></returns>
     [HttpGet]
     [Route("{id}")]
     public async Task<IActionResult> Get([Required] int id)

@@ -10,7 +10,7 @@ public interface IOrderService
 
     void ChangeStatus(int id, string status);
 
-    void AddProductToOrder(int id, int producrId);
+    void AddProductToOrder(int id, int productId);
 
     void RemoveProductFromOrder(int id, int productId);
 }
