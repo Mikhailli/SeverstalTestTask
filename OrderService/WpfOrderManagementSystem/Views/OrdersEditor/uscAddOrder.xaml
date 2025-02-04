@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="../../Styles/Common.xaml"/>
                 <ResourceDictionary Source="../../Styles/ExtendedNumericUpDown.xaml"/>
                 <ResourceDictionary Source="../../Styles/ComboBox.xaml"/>
+                <ResourceDictionary Source="../../Styles/DataGrid.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -30,20 +31,57 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource BigTextBlockStyle}"><Run Text="Заказы"/></TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource BigTextBlockStyle}"><Run Text="Добавление заказа"/></TextBlock>
 
-        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Название:"/></TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NewOrderItemViewModel.OrderDate}" Style="{StaticResource MediumTextBoxStyle}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Статус:"/></TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NewOrderItemViewModel.Status}" Style="{StaticResource MediumTextBoxStyle}"></TextBox>
 
-        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Описание:"/></TextBlock>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NewOrderItemViewModel.StorageUntil}" Style="{StaticResource MediumTextBoxStyle}"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Имя клиента:"/></TextBlock>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NewOrderItemViewModel.CustomerName}" Style="{StaticResource MediumTextBoxStyle}"></TextBox>
 
-        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Статус:"/></TextBlock>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NewOrderItemViewModel.Status}" Style="{StaticResource MediumTextBoxStyle}"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Номер телефона"/></TextBlock>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NewOrderItemViewModel.PhoneNumber}" Style="{StaticResource MediumTextBoxStyle}"></TextBox>
 
-        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Статус:"/></TextBlock>
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NewOrderItemViewModel.CustomerName}" Style="{StaticResource MediumTextBoxStyle}"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Количество дней хранения на складе"/></TextBlock>
+        <xctk:DoubleUpDown Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" FontSize="14" Style="{StaticResource CustomDoubleUpDownStyle}" CultureInfo="ru-RU"
+                   Value="{Binding StorageDays}" Minimum="2" Maximum="20" Padding="2"/>
+
+        <TextBlock Grid.Row="5" Style="{StaticResource MediumTextBlockStyle}" FontFamily="{StaticResource FontSemilight}"
+                   VerticalAlignment="Center" Margin="4,5"><Run Text="Товары:"/></TextBlock>
+        <Grid Grid.Row="5" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <ComboBox Grid.Column="0" ItemsSource="{Binding ProductItems}"
+            DisplayMemberPath="Name" FontSize="14" SelectedItem="{Binding ProductToAdd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            Style="{StaticResource CustomComboBox}" Background="White">
+            </ComboBox>
+
+            <Button Grid.Column="1" Style="{StaticResource CustomFlatButton}" Content="+" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                    Width="25" Height="25" Margin="0,5,5,4" Command="{Binding AddProductToOrderCmd}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <Button Grid.Column="2" Style="{StaticResource CustomFlatButton}" Content="-" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                    Width="25" Height="25"  Margin="0,5,5,4" Command="{Binding DeleteProductFromOrderCmd}" VerticalAlignment="Center" />
+        </Grid>
+
+        <DataGrid Grid.Row="6" Grid.ColumnSpan="2" ItemsSource="{Binding NewOrderItemViewModel.OrderItems}" Style="{StaticResource CustomDataGrid}"
+                SelectedItem="{Binding ProductToDelete}" AutoGenerateColumns="False" CanUserAddRows="True"
+                CanUserDeleteRows="True" SelectionMode="Single" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}" IsReadOnly="True" Width="*" Header="Наименование"/>
+                <DataGridTemplateColumn Header="Количество" IsReadOnly="False" CanUserSort="False" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Style="{StaticResource CustomComboBoxEditableTextBox}" FontSize="12" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

@@ -12,8 +12,25 @@ internal class AddOrderViewModel(IServiceForOrderManagement orderService, IProdu
 {
     private readonly IServiceForOrderManagement _orderService = orderService;
     private readonly IProductServiceForInformation _productService = productService;
+
+    private Command? _addProductToOrder;
+    private Command? _deleteProductFromOrder;
+
     private OrderItemViewModel _newOrderItemViewModel = null!;
-    private ObservableCollection<ProductItemViewModel> _orderItems = null!;
+    private ProductItemViewModel? _productToDelete;
+    private ProductItemViewModel? _productToAdd;
+
+    private int _storageDays;
+
+    public int StorageDays
+    {
+        get => _storageDays;
+        set
+        {
+            _storageDays = value;
+            RaisePropertyChanged(nameof(StorageDays));
+        }
+    }
 
     public OrderItemViewModel NewOrderItemViewModel
     {
@@ -25,29 +42,66 @@ internal class AddOrderViewModel(IServiceForOrderManagement orderService, IProdu
         }
     }
 
-    public ObservableCollection<ProductItemViewModel> OrderItems
+    public ProductItemViewModel? ProductToDelete
     {
-        get => _orderItems;
+        get => _productToDelete;
         set
         {
-            if (_orderItems != value)
+            if (_productToDelete != value)
             {
-                _orderItems = value;
-                RaisePropertyChanged(nameof(OrderItems));
+                _productToDelete = value;
+                RaisePropertyChanged(nameof(ProductToDelete));
+                RaiseCommandCanExecuteChanged(DeleteProductFromOrderCmd);
             }
         }
     }
+
+    public ProductItemViewModel? ProductToAdd
+    {
+        get => _productToAdd;
+        set
+        {
+            if (_productToAdd != value)
+            {
+                _productToAdd = value;
+                RaisePropertyChanged(nameof(ProductToAdd));
+                RaiseCommandCanExecuteChanged(AddProductToOrderCmd);
+            }
+        }
+    }
+
+    public ObservableCollection<ProductItemViewModel> ProductItems { get; set; } = [];
 
     public DataBaseEditorViewModelBase ParentViewModel { get; set; } = null!;
 
     public async void Init()
     {
         NewOrderItemViewModel = new OrderItemViewModel();
-        OrderItems = new ObservableCollection<ProductItemViewModel>();
+        ProductItems = new ObservableCollection<ProductItemViewModel>();
         var products = await _productService.GetAllAsync();
         foreach (var product in products)
         {
-            OrderItems.Add(new ProductItemViewModel(product));
+            ProductItems.Add(new ProductItemViewModel(product));
+        }
+    }
+
+    public Command AddProductToOrderCmd
+    {
+        get
+        {
+            if (_addProductToOrder is null)
+                _addProductToOrder = new Command(AddProductToOrder, CanExecuteAddProductToOrder);
+            return _addProductToOrder;
+        }
+    }
+
+    public Command DeleteProductFromOrderCmd
+    {
+        get
+        {
+            if (_deleteProductFromOrder is null)
+                _deleteProductFromOrder = new Command(DeleteProductFromOrder, CanExecuteDeleteProductFromOrder);
+            return _deleteProductFromOrder;
         }
     }
 
@@ -60,16 +114,38 @@ internal class AddOrderViewModel(IServiceForOrderManagement orderService, IProdu
 
         try
         {
+            var now = DateTime.Now;
             var addedOrder = await _orderService.AddOrderAsync(new OrderParameters
             {
-                OrderDate = NewOrderItemViewModel.OrderDate,
-                StorageUntil = NewOrderItemViewModel.StorageUntil,
+                OrderDate = now,
+                StorageUntil = now.AddDays(_storageDays),
                 Status = NewOrderItemViewModel.Status,
                 CustomerName = NewOrderItemViewModel.CustomerName,
                 PhoneNumber = NewOrderItemViewModel.PhoneNumber
             });
 
-            var products = await _productService.GetAllAsync();
+            if (NewOrderItemViewModel.OrderItems.Any())
+            {
+                await _orderService.ChangeOrderItemsAsync(addedOrder.Id, NewOrderItemViewModel.OrderItems.Select(item => new OrderItemParameters() { ProductId = item.Id, Quantity = item.Quantity }).ToList());
+            }
+
+            addedOrder.Items = [];
+            foreach (var orderItem in NewOrderItemViewModel.OrderItems)
+            {
+                addedOrder.Items.Add(new OrderItem()
+                {
+                    Product = new Product()
+                    {
+                        Id = orderItem.Id,
+                        Article = orderItem.Article,
+                        Name = orderItem.Name,
+                        Description = orderItem.Description,
+                        Price = orderItem.Price,
+                        StockQuantity = orderItem.StockQuantity
+                    },
+                    Quantity = orderItem.Quantity
+                });
+            }
             NewOrderItemViewModel = new OrderItemViewModel(addedOrder);
 
             ClosePanel(EditorPanelResult.Success, addedOrder);
@@ -98,5 +174,25 @@ internal class AddOrderViewModel(IServiceForOrderManagement orderService, IProdu
         }
 
         return true;
+    }
+
+    protected bool CanExecuteAddProductToOrder(object? obj)
+    {
+        return ProductToAdd != null;
+    }
+
+    protected void AddProductToOrder(object? obj)
+    {
+        NewOrderItemViewModel.OrderItems.Add(new ProductItemViewModel(ProductToAdd!));
+    }
+
+    protected bool CanExecuteDeleteProductFromOrder(object? obj)
+    {
+        return ProductToDelete != null;
+    }
+
+    protected void DeleteProductFromOrder(object? obj)
+    {
+        NewOrderItemViewModel.OrderItems.Remove(ProductToDelete!);
     }
 }

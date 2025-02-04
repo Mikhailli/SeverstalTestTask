@@ -73,11 +73,14 @@
                 </Style>
             </DataGrid.Style>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding OrderDate}" Header="Название"/>
-                <DataGridTextColumn Binding="{Binding StorageUntil}" Header="Описание"/>
-                <DataGridTextColumn Binding="{Binding Status}" Header="Цена"/>
-                <DataGridTextColumn Binding="{Binding CustomerName}" Width="*" Header="Поставщик"/>
-                <DataGridTextColumn Binding="{Binding PhoneNumber}" Width="*" Header="Поставщик"/>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Номер заказа"/>
+                <DataGridTextColumn Binding="{Binding OrderDate, StringFormat=dd.MM.yyyy hh:mm:ss}" Header="Дата оформления"/>
+                <DataGridTextColumn Binding="{Binding StorageUntil, StringFormat=dd.MM.yyyy hh:mm:ss}" Header="Хранение до"/>
+                <DataGridTextColumn Binding="{Binding Status}" Header="Статус заказа"/>
+                <DataGridTextColumn Binding="{Binding CustomerName}" Width="*" Header="Имя клиента"/>
+                <DataGridTextColumn Binding="{Binding PhoneNumber}" Width="*" Header="Номер телефона"/>
+                <DataGridTextColumn Binding="{Binding Price}" Width="*" Header="Стоимость"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Width="*" Header="Количество товаров"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

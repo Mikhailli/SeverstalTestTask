@@ -86,6 +86,10 @@ internal class OrderItemViewModel : ViewModelBase
         }
     }
 
+    public decimal Price => OrderItems.Sum(item => item.Price * item.Quantity);
+
+    public int Quantity => OrderItems.Sum(item => item.Quantity);
+
     public ObservableCollection<ProductItemViewModel> OrderItems { get; set; }
 
     public OrderItemViewModel()
