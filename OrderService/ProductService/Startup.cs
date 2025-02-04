@@ -5,6 +5,9 @@ using ProductService.Modules;
 
 namespace ProductService;
 
+/// <summary>
+/// Класс содержит методы для внедрения зависимостей
+/// </summary>
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)

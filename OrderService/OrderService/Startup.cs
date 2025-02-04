@@ -5,6 +5,9 @@ using OrderService.Modules;
 
 namespace OrderService;
 
+/// <summary>
+/// Класс содержит методы для внедрения зависимостей
+/// </summary>
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)

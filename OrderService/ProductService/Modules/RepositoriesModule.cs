@@ -6,8 +6,15 @@ using Module = Autofac.Module;
 
 namespace ProductService.Modules;
 
+/// <summary>
+/// Модуль для внедрения зависимостей связанных с репозиториями
+/// </summary>
 public class RepositoriesModule : Module
 {
+    /// <summary>
+    /// Внедрение зависимостей
+    /// </summary>
+    /// <param name="builder"></param>
     protected override void Load(ContainerBuilder builder)
     {
         builder.RegisterGeneric(typeof(EFGenericRepository<>))

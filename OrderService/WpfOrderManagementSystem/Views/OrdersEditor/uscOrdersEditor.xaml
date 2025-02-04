@@ -74,8 +74,8 @@
             </DataGrid.Style>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Номер заказа"/>
-                <DataGridTextColumn Binding="{Binding OrderDate, StringFormat=dd.MM.yyyy hh:mm:ss}" Header="Дата оформления"/>
-                <DataGridTextColumn Binding="{Binding StorageUntil, StringFormat=dd.MM.yyyy hh:mm:ss}" Header="Хранение до"/>
+                <DataGridTextColumn Binding="{Binding OrderDate, StringFormat=dd.MM.yyyy hh:mm:ss, ConverterCulture=ru}" Header="Дата оформления"/>
+                <DataGridTextColumn Binding="{Binding StorageUntil, StringFormat=dd.MM.yyyy hh:mm:ss, ConverterCulture=ru}" Header="Хранение до"/>
                 <DataGridTextColumn Binding="{Binding Status}" Header="Статус заказа"/>
                 <DataGridTextColumn Binding="{Binding CustomerName}" Width="*" Header="Имя клиента"/>
                 <DataGridTextColumn Binding="{Binding PhoneNumber}" Width="*" Header="Номер телефона"/>

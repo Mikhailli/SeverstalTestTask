@@ -3,6 +3,10 @@ using Common.DataAccess.Models;
 
 namespace Common.DataAccess.Implementations;
 
+/// <summary>
+/// EF репозиторий для товаров
+/// </summary>
+/// <param name="context">Контекс базы данных</param>
 internal class EFProductRepository(OrderDbContext context) : EFGenericRepository<Product>(context), IProductRepository
 {
     public Product? CreateAndAdd(string article, string name, string? description, decimal price, int stockQuantity)
