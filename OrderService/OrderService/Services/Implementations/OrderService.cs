@@ -5,6 +5,9 @@ using OrderService.Services.Interfaces;
 
 namespace OrderService.Services.Implementations;
 
+/// <summary>
+/// Сервиса изменения заказов
+/// </summary>
 public class OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IUnitOfWork unitOfWork) : IOrderService
 {
     private readonly IOrderRepository _orderRepository = orderRepository;

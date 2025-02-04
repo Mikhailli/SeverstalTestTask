@@ -2,6 +2,9 @@
 
 namespace Common.DataAccess.Models;
 
+/// <summary>
+/// Модель для продукта
+/// </summary>
 public class Product : Entity
 {
     public string Article { get; set; } = null!;

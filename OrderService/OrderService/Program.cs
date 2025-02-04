@@ -10,6 +10,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
+
+// Подключение swagger
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -35,7 +37,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(startup.ConfigureContainer);
 var app = builder.Build();
 startup.Configure(app, app.Environment);
 
-
+// Подключение swagger
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
