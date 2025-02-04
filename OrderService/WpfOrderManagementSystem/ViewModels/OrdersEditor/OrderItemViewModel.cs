@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using WpfOrderManagementSystem.Infrastructure;
 using WpfOrderManagementSystem.Models;
+using WpfOrderManagementSystem.ViewModels.ProductsEditor;
 
 namespace WpfOrderManagementSystem.ViewModels.OrdersEditor;
 
@@ -11,7 +13,6 @@ internal class OrderItemViewModel : ViewModelBase
     private string _status = null!;
     private string? _customerName;
     private string? _phoneNumber;
-    private ICollection<OrderItem> _items = null!;
 
     public int Id { get; }
 
@@ -85,25 +86,11 @@ internal class OrderItemViewModel : ViewModelBase
         }
     }
 
-    [Required]
-    public ICollection<OrderItem> Items
-    {
-        get => _items;
-        set
-        {
-            if (_items != value)
-            {
-                _items = value;
-                RaisePropertyChanged(nameof(Items));
-            }
-        }
-    }
-
-    
+    public ObservableCollection<ProductItemViewModel> OrderItems { get; set; }
 
     public OrderItemViewModel()
     {
-
+        OrderItems = [];
     }
 
     public OrderItemViewModel(Order order)
@@ -114,7 +101,11 @@ internal class OrderItemViewModel : ViewModelBase
         Status = order.Status;
         CustomerName = order.CustomerName;
         PhoneNumber = order.PhoneNumber;
-        Items = order.Items;
+        OrderItems = [];
+        foreach (var item in order.Items)
+        {
+            OrderItems.Add(new ProductItemViewModel(item.Product, item.Quantity));
+        }
     }
 
     public OrderItemViewModel(OrderItemViewModel orderItemViewModel)
@@ -125,7 +116,7 @@ internal class OrderItemViewModel : ViewModelBase
         Status = orderItemViewModel.Status;
         CustomerName = orderItemViewModel.CustomerName;
         PhoneNumber = orderItemViewModel.PhoneNumber;
-        Items = orderItemViewModel.Items;
+        OrderItems = new ObservableCollection<ProductItemViewModel>(orderItemViewModel.OrderItems.Select(orderItem => new ProductItemViewModel(orderItem, orderItem.Quantity)));
     }
 
     public ICollection<ValidationResult>? Validate()

@@ -2,6 +2,7 @@
 using System.Text;
 using WpfOrderManagementSystem.Infrastructure;
 using WpfOrderManagementSystem.Models;
+using WpfOrderManagementSystem.Models.ApiRequestModels;
 using WpfOrderManagementSystem.Services.Interfaces;
 using WpfOrderManagementSystem.ViewModels.ProductsEditor;
 
@@ -14,9 +15,12 @@ internal class EditOrderViewModel(IServiceForOrderManagement orderService,
     private readonly IProductServiceForInformation _productServiceForInformation = productServiceForInformation;
     private readonly IOrderServiceForInformation _orderServiceForInformation = orderServiceForInformation;
 
-    private ProductItemViewModel? _selectedProduct;
+    private Command? _addProductToOrder;
+    private Command? _deleteProductFromOrder;
+
     private OrderItemViewModel _editedOrderItemViewModel = null!;
-    private ObservableCollection<ProductItemViewModel> _productItems = null!;
+    private ProductItemViewModel? _productToDelete;
+    private ProductItemViewModel? _productToAdd;
 
     public OrderItemViewModel EditedOrderItemViewModel
     {
@@ -28,40 +32,64 @@ internal class EditOrderViewModel(IServiceForOrderManagement orderService,
         }
     }
 
-    public ProductItemViewModel? SelectedProduct
+    public ProductItemViewModel? ProductToDelete
     {
-        get => _selectedProduct;
+        get => _productToDelete;
         set
         {
-            if (_selectedProduct != value)
+            if (_productToDelete != value)
             {
-                _selectedProduct = value;
-                RaisePropertyChanged(nameof(SelectedProduct));
+                _productToDelete = value;
+                RaisePropertyChanged(nameof(ProductToDelete));
+                RaiseCommandCanExecuteChanged(DeleteProductFromOrderCmd);
             }
         }
     }
 
-    public ObservableCollection<ProductItemViewModel> ProductItems
+    public ProductItemViewModel? ProductToAdd
     {
-        get => _productItems;
+        get => _productToAdd;
         set
         {
-            if (_productItems != value)
+            if (_productToAdd != value)
             {
-                _productItems = value;
-                RaisePropertyChanged(nameof(ProductItems));
+                _productToAdd = value;
+                RaisePropertyChanged(nameof(ProductToAdd));
+                RaiseCommandCanExecuteChanged(AddProductToOrderCmd);
             }
         }
     }
+
+    public ObservableCollection<ProductItemViewModel> ProductItems { get; set; } = [];
 
     public async void Init(OrderItemViewModel orderItemViewModel)
     {
-        EditedOrderItemViewModel = new OrderItemViewModel(orderItemViewModel);
         ProductItems = [];
         var products = await _productServiceForInformation.GetAllAsync();
         foreach (var product in products)
         {
             ProductItems.Add(new ProductItemViewModel(product));
+        }
+        EditedOrderItemViewModel = new OrderItemViewModel(orderItemViewModel);
+    }
+
+    public Command AddProductToOrderCmd
+    {
+        get
+        {
+            if (_addProductToOrder is null)
+                _addProductToOrder = new Command(AddProductToOrder, CanExecuteAddProductToOrder);
+            return _addProductToOrder;
+        }
+    }
+
+    public Command DeleteProductFromOrderCmd
+    {
+        get
+        {
+            if (_deleteProductFromOrder is null)
+                _deleteProductFromOrder = new Command(DeleteProductFromOrder, CanExecuteDeleteProductFromOrder);
+            return _deleteProductFromOrder;
         }
     }
 
@@ -80,12 +108,29 @@ internal class EditOrderViewModel(IServiceForOrderManagement orderService,
                 await _orderService.ChangeStatusAsync(EditedOrderItemViewModel.Id, EditedOrderItemViewModel.Status);
             }
             
-            if (orderToUpdate.Items.Equals(EditedOrderItemViewModel.Items) is false)
+            if (orderToUpdate.Items.Equals(EditedOrderItemViewModel.OrderItems) is false)
             {
-                await _orderService.ChangeOrderItemsAsync(orderToUpdate.Id, EditedOrderItemViewModel.Items.Select(item => (item.Product.Id, item.Quantity)).ToList());
+                await _orderService.ChangeOrderItemsAsync(orderToUpdate.Id, EditedOrderItemViewModel.OrderItems.Select(item => new OrderItemParameters() { ProductId = item.Id, Quantity = item.Quantity}).ToList());
             }
 
             var updatedOrder = await _orderServiceForInformation.GetAsync(EditedOrderItemViewModel.Id);
+            updatedOrder.Items.Clear();
+            foreach (var orderItem in EditedOrderItemViewModel.OrderItems)
+            {
+                updatedOrder.Items.Add(new OrderItem() 
+                { 
+                    Product = new Product()
+                    {
+                        Id = orderItem.Id,
+                        Article = orderItem.Article,
+                        Name = orderItem.Name,
+                        Description = orderItem.Description,
+                        Price = orderItem.Price,
+                        StockQuantity = orderItem.StockQuantity
+                    },
+                    Quantity = orderItem.Quantity
+                });
+            }
             ClosePanel(EditorPanelResult.Success, updatedOrder);
             ErrorMessage = null;
             HasErrors = false;
@@ -112,5 +157,25 @@ internal class EditOrderViewModel(IServiceForOrderManagement orderService,
         }
 
         return true;
+    }
+
+    protected bool CanExecuteAddProductToOrder(object? obj)
+    {
+        return ProductToAdd != null;
+    }
+
+    protected void AddProductToOrder(object? obj)
+    {
+        EditedOrderItemViewModel.OrderItems.Add(new ProductItemViewModel(ProductToAdd!));
+    }
+
+    protected bool CanExecuteDeleteProductFromOrder(object? obj)
+    {
+        return ProductToDelete != null;
+    }
+
+    protected void DeleteProductFromOrder(object? obj)
+    {
+        EditedOrderItemViewModel.OrderItems.Remove(ProductToDelete!);
     }
 }

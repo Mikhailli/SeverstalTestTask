@@ -1,5 +1,6 @@
 ﻿using Common.DataAccess.Interfaces;
 using Common.DataAccess.Models;
+using OrderService.ApiRequestModels;
 using OrderService.Services.Interfaces;
 
 namespace OrderService.Services.Implementations;
@@ -46,25 +47,22 @@ public class OrderService(IOrderRepository orderRepository, IProductRepository p
         _unitOfWork.Commit();
     }
 
-    public async void ChangeOrderItems(int id, ICollection<(int productId, int Quantity)> orderItems)
+    public async void ChangeOrderItems(int id, ICollection<OrderItemParameters> orderItemParameters)
     {
-        var orderToUpdate = _orderRepository.GetById(id);
-
-        if (orderToUpdate is null)
-        {
-            throw new Exception($"Заказ с идентификатором {id} не найден");
-        }
+        var orderToUpdate = await _orderRepository.GetByIdAsync(id) 
+            ?? throw new Exception($"Заказ с идентификатором {id} не найден");
 
         orderToUpdate.Items.Clear();
-        foreach (var item in orderItems)
+        foreach (var item in orderItemParameters)
         {
-            if (await _productRepository.GetByIdAsync(item.productId) is null)
+            if (await _productRepository.GetByIdAsync(item.ProductId) is null)
             {
-                throw new Exception($"Товар с идентификатором {item.productId} не найден");
+                throw new Exception($"Товар с идентификатором {item.ProductId} не найден");
             }
 
-            var orderItem = new OrderItem() { OrderId = id, ProductId = item.productId, Quantity = item.Quantity };
+            orderToUpdate.Items.Add(new OrderItem() { OrderId = id, ProductId = item.ProductId, Quantity = item.Quantity });
         }
+
         _orderRepository.Update(orderToUpdate, orderToUpdate.OrderDate, orderToUpdate.StorageUntil,
             orderToUpdate.Status, orderToUpdate.CustomerName, orderToUpdate.PhoneNumber, orderToUpdate.Items);
         _unitOfWork.Commit();

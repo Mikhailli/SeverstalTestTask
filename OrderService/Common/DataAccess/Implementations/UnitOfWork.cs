@@ -1,6 +1,5 @@
 ﻿using Common.DataAccess.Interfaces;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Tanneryd.BulkOperations.EFCore;
 

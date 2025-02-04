@@ -13,7 +13,7 @@ internal class AddOrderViewModel(IServiceForOrderManagement orderService, IProdu
     private readonly IServiceForOrderManagement _orderService = orderService;
     private readonly IProductServiceForInformation _productService = productService;
     private OrderItemViewModel _newOrderItemViewModel = null!;
-    private ObservableCollection<ProductItemViewModel> _productItems = null!;
+    private ObservableCollection<ProductItemViewModel> _orderItems = null!;
 
     public OrderItemViewModel NewOrderItemViewModel
     {
@@ -25,15 +25,15 @@ internal class AddOrderViewModel(IServiceForOrderManagement orderService, IProdu
         }
     }
 
-    public ObservableCollection<ProductItemViewModel> ProductItems
+    public ObservableCollection<ProductItemViewModel> OrderItems
     {
-        get => _productItems;
+        get => _orderItems;
         set
         {
-            if (_productItems != value)
+            if (_orderItems != value)
             {
-                _productItems = value;
-                RaisePropertyChanged(nameof(ProductItems));
+                _orderItems = value;
+                RaisePropertyChanged(nameof(OrderItems));
             }
         }
     }
@@ -43,11 +43,11 @@ internal class AddOrderViewModel(IServiceForOrderManagement orderService, IProdu
     public async void Init()
     {
         NewOrderItemViewModel = new OrderItemViewModel();
-        ProductItems = new ObservableCollection<ProductItemViewModel>();
+        OrderItems = new ObservableCollection<ProductItemViewModel>();
         var products = await _productService.GetAllAsync();
         foreach (var product in products)
         {
-            ProductItems.Add(new ProductItemViewModel(product));
+            OrderItems.Add(new ProductItemViewModel(product));
         }
     }
 
@@ -68,6 +68,8 @@ internal class AddOrderViewModel(IServiceForOrderManagement orderService, IProdu
                 CustomerName = NewOrderItemViewModel.CustomerName,
                 PhoneNumber = NewOrderItemViewModel.PhoneNumber
             });
+
+            var products = await _productService.GetAllAsync();
             NewOrderItemViewModel = new OrderItemViewModel(addedOrder);
 
             ClosePanel(EditorPanelResult.Success, addedOrder);

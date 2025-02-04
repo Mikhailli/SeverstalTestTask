@@ -24,5 +24,10 @@ namespace WpfOrderManagementSystem.Views.OrdersEditor
         {
             InitializeComponent();
         }
+
+        private void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
+        }
     }
 }

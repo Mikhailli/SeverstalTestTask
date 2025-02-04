@@ -8,6 +8,7 @@ namespace WpfOrderManagementSystem.ViewModels.OrdersEditor;
 internal class OrderEditorViewModel : DataBaseEditorViewModelBase
 {
     private readonly IOrderServiceForInformation _orderServiceForInformation;
+    private readonly IProductServiceForInformation _productService;
     private readonly AddOrderViewModel _addOrderViewModel;
     private readonly EditOrderViewModel _editOrderViewModel;
     private ObservableCollection<OrderItemViewModel> _orderItems = null!;
@@ -57,6 +58,7 @@ internal class OrderEditorViewModel : DataBaseEditorViewModelBase
     }
 
     public DeleteOrderViewModel DeleteOrderViewModel { get; set; }
+    public Product[] AllProducts { get; set; } = [];
 
     public bool IsDeletePanelVisible
     {
@@ -71,10 +73,11 @@ internal class OrderEditorViewModel : DataBaseEditorViewModelBase
         }
     }
 
-    public OrderEditorViewModel(IOrderServiceForInformation orderServiceForInformation, 
+    public OrderEditorViewModel(IOrderServiceForInformation orderServiceForInformation, IProductServiceForInformation productService, 
         DeleteOrderViewModel deleteOrderViewModel, AddOrderViewModel addOrderViewModel, EditOrderViewModel editOrderViewModel) : base("Заказы")
     {
         _orderServiceForInformation = orderServiceForInformation;
+        _productService = productService;
 
         _addOrderViewModel = addOrderViewModel;
         _addOrderViewModel.ParentViewModel = this;
@@ -90,6 +93,7 @@ internal class OrderEditorViewModel : DataBaseEditorViewModelBase
     public override async void Update()
     {
         var orders = await _orderServiceForInformation.GetAllAsync();
+        AllProducts = await _productService.GetAllAsync();
         OrderItems = new ObservableCollection<OrderItemViewModel>(orders.Select(order => new OrderItemViewModel(order)));
     }
 

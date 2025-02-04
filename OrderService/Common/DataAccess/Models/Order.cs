@@ -9,5 +9,5 @@ public class Order : Entity
     public string Status { get; set; } = null!;
     public string? CustomerName { get; set; }
     public string? PhoneNumber { get; set; }
-    public ICollection<OrderItem> Items { get; set; } = null!;
+    public virtual ICollection<OrderItem> Items { get; set; } = null!;
 }

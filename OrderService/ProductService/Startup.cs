@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Text.Json.Serialization;
+using Autofac;
 using Common.DataAccess.Implementations;
 using ProductService.Modules;
 
@@ -11,7 +12,10 @@ public class Startup
         services.AddDbContext<OrderDbContext>();
         services.AddHttpContextAccessor();
 
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
     }
 
     public void ConfigureContainer(HostBuilderContext hostBuilderContext, ContainerBuilder builder)

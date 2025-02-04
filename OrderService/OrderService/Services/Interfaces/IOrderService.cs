@@ -1,4 +1,5 @@
 ﻿using Common.DataAccess.Models;
+using OrderService.ApiRequestModels;
 
 namespace OrderService.Services.Interfaces;
 
@@ -10,5 +11,5 @@ public interface IOrderService
 
     void ChangeStatus(int id, string status);
 
-    void ChangeOrderItems(int id, ICollection<(int productId, int Quantity)> orderItems);
+    void ChangeOrderItems(int id, ICollection<OrderItemParameters> orderItemParameters);
 }

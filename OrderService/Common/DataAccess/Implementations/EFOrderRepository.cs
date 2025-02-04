@@ -1,5 +1,8 @@
-﻿using Common.DataAccess.Interfaces;
+﻿using System.Linq.Expressions;
+using Common.DataAccess.Interfaces;
 using Common.DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Common.DataAccess.Implementations;
 
@@ -66,5 +69,20 @@ internal class EFOrderRepository(OrderDbContext context) : EFGenericRepository<O
         }
 
         Update(order);
+    }
+
+    public override IEnumerable<Order> GetAll()
+    {
+        return Get(includes:
+        [
+            source => source
+            .Include(order => order.Items)
+            .ThenInclude(item => item.Product)
+        ]).AsEnumerable();
+    }
+
+    public override async Task<Order?> GetByIdAsync(object? id)
+    {
+        return await _dbSet.Include(o => o.Items).FirstOrDefaultAsync(o => o.Id == (int)id!);
     }
 }

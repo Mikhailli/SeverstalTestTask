@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfOrderManagementSystem.Views.OrdersEditor" 
              xmlns:orderseditor="clr-namespace:WpfOrderManagementSystem.ViewModels.OrdersEditor" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
              d:DataContext="{d:DesignInstance Type=orderseditor:EditOrderViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,6 +15,7 @@
                 <ResourceDictionary Source="../../Styles/Common.xaml"/>
                 <ResourceDictionary Source="../../Styles/ExtendedNumericUpDown.xaml"/>
                 <ResourceDictionary Source="../../Styles/ComboBox.xaml"/>
+                <ResourceDictionary Source="../../Styles/DataGrid.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -36,5 +38,39 @@
         <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource MediumTextBlockStyle}"><Run Text="Статус:"/></TextBlock>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EditedOrderItemViewModel.Status}" Style="{StaticResource MediumTextBoxStyle}"></TextBox>
 
+        <TextBlock Grid.Row="2" Style="{StaticResource MediumTextBlockStyle}" FontFamily="{StaticResource FontSemilight}"
+           VerticalAlignment="Center" Margin="4,5"><Run Text="Товары:"/></TextBlock>
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <ComboBox Grid.Column="0" ItemsSource="{Binding ProductItems}"
+                    DisplayMemberPath="Name" FontSize="14" SelectedItem="{Binding ProductToAdd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Style="{StaticResource CustomComboBox}" Background="White">
+            </ComboBox>
+
+            <Button Grid.Column="1" Style="{StaticResource CustomFlatButton}" Content="+" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+            Width="25" Height="25" Margin="0,5,5,4" Command="{Binding AddProductToOrderCmd}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <Button Grid.Column="2" Style="{StaticResource CustomFlatButton}" Content="-" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+            Width="25" Height="25"  Margin="0,5,5,4" Command="{Binding DeleteProductFromOrderCmd}" VerticalAlignment="Center" />
+        </Grid>
+
+        <DataGrid Grid.Row="7" Grid.ColumnSpan="2" ItemsSource="{Binding EditedOrderItemViewModel.OrderItems}" Style="{StaticResource CustomDataGrid}"
+          SelectedItem="{Binding ProductToDelete}" AutoGenerateColumns="False" CanUserAddRows="True"
+          CanUserDeleteRows="True" SelectionMode="Single" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}" IsReadOnly="True" Width="*" Header="Наименование"/>
+                <DataGridTemplateColumn Header="Количество" IsReadOnly="False" CanUserSort="False" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Style="{StaticResource CustomComboBoxEditableTextBox}" FontSize="12" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

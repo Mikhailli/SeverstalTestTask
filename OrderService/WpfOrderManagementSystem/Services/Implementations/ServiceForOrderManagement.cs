@@ -58,13 +58,13 @@ internal class ServiceForOrderManagement(HttpClient httpClient, ServiceForOrderM
         }
     }
 
-    public async Task ChangeOrderItemsAsync(int id, ICollection<(int productId, int quantity)> orderItems)
+    public async Task ChangeOrderItemsAsync(int id, ICollection<OrderItemParameters> orderItems)
     {
         var requestUrl = ServiceForOrderManagementApi.ChangeOrderItems(_baseUrl, id);
 
         var jsonString = JsonConvert.SerializeObject(orderItems);
         var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(requestUrl, content);
+        var response = await _httpClient.PutAsync(requestUrl, content);
 
         if (response.IsSuccessStatusCode is false)
         {

@@ -29,7 +29,7 @@ public class OrderController(IOrderService orderService) : Controller
 
     [HttpPut]
     [Route("{id}")]
-    public IActionResult ChangeOrderItems([Required] int id, [FromBody] ICollection<(int productId, int quantity)> parameters)
+    public IActionResult ChangeOrderItems([Required] int id, [FromBody] ICollection<OrderItemParameters> parameters)
     {
         _orderService.ChangeOrderItems(id, parameters);
 

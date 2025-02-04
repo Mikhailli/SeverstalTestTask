@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using WpfOrderManagementSystem.Infrastructure;
 using WpfOrderManagementSystem.Models;
 
@@ -11,6 +12,7 @@ internal class ProductItemViewModel : ViewModelBase
     private string? _description;
     private decimal _price;
     private int _stockQuantity;
+    private int _quanitity;
     private bool _isSelected;
 
     public int Id { get; }
@@ -84,6 +86,19 @@ internal class ProductItemViewModel : ViewModelBase
         }
     }
 
+    public int Quantity
+    {
+        get => _quanitity;
+        set
+        {
+            if (_quanitity != value)
+            {
+                _quanitity = value;
+                RaisePropertyChanged(nameof(Quantity));
+            }
+        }
+    }
+
     public bool IsSelected
     {
         get => _isSelected;
@@ -102,7 +117,7 @@ internal class ProductItemViewModel : ViewModelBase
 
     }
 
-    public ProductItemViewModel(Product product)
+    public ProductItemViewModel(Product product, int quantity = 1)
     {
         Id = product.Id;
         Name = product.Name;
@@ -111,9 +126,10 @@ internal class ProductItemViewModel : ViewModelBase
         Price = product.Price;
         StockQuantity = product.StockQuantity;
         IsSelected = false;
+        Quantity = quantity;
     }
 
-    public ProductItemViewModel(ProductItemViewModel productItemViewModel)
+    public ProductItemViewModel(ProductItemViewModel productItemViewModel, int quantity = 1)
     {
         Id = productItemViewModel.Id;
         Name = productItemViewModel.Name;
@@ -122,6 +138,7 @@ internal class ProductItemViewModel : ViewModelBase
         Price = productItemViewModel.Price;
         StockQuantity = productItemViewModel.StockQuantity;
         IsSelected = false;
+        Quantity = quantity;
     }
 
     public ICollection<ValidationResult>? Validate()

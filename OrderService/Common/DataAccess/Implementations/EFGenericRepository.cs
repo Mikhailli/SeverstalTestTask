@@ -55,7 +55,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         return id is null ? null : _dbSet.Find(id);
     }
 
-    public Task<TEntity?> GetByIdAsync(object? id)
+    public virtual Task<TEntity?> GetByIdAsync(object? id)
     {
         return id is null ? Task.FromResult((TEntity?)null) : _dbSet.FindAsync(id).AsTask();
     }
