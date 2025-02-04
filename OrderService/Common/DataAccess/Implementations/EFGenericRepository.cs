@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Common.DataAccess.Implementations;
 
+/// <summary>
+/// Дженериковский EF репозиторий
+/// </summary>
+/// <typeparam name="TEntity">Тип сущности</typeparam>
 public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity
 {
     protected readonly DbContext _dbContext;

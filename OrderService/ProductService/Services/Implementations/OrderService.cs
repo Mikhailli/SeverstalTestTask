@@ -4,6 +4,10 @@ using ProductService.Services.Interfaces;
 
 namespace ProductService.Services.Implementations;
 
+/// <summary>
+/// Сервис для получения информации о заказах
+/// </summary>
+/// <param name="orderRepository">Репозиторий для заказов</param>
 public class OrderService(IOrderRepository orderRepository) : IOrderService
 {
     private readonly IOrderRepository _orderRepository = orderRepository;

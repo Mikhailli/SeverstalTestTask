@@ -4,12 +4,19 @@ using ProductService.Services.Interfaces;
 
 namespace ProductService.Controllers;
 
+/// <summary>
+/// Контроллер для получения информации о товарах
+/// </summary>
+/// <param name="productService">Сервис для получения информации о товарах</param>
 [ApiController]
 [Route("api/[controller]")]
 public class ProductController(IProductService productService) : Controller
 {
     private readonly IProductService _productService = productService;
 
+    /// <summary>
+    /// Получение всех товаров
+    /// </summary>
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -22,7 +29,6 @@ public class ProductController(IProductService productService) : Controller
     /// Получает информацию о товаре по его идентификатору
     /// </summary>
     /// <param name="id">Идентификатор товара</param>
-    /// <returns></returns>
     [HttpGet]
     [Route("{id}")]
     public async Task<IActionResult> Get([Required] int id)

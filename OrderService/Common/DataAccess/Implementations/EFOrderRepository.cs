@@ -1,8 +1,6 @@
-﻿using System.Linq.Expressions;
-using Common.DataAccess.Interfaces;
+﻿using Common.DataAccess.Interfaces;
 using Common.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Common.DataAccess.Implementations;
 
@@ -36,43 +34,9 @@ internal class EFOrderRepository(OrderDbContext context) : EFGenericRepository<O
         Update(order);
     }
 
-    public void AddProductToOrder(Order order, Product product)
-    {
-        var item = order.Items.FirstOrDefault(item => item.ProductId == product.Id);
-        if (item is null)
-        {
-            order.Items.Add(new OrderItem() { Product = product, Order = order, Quantity = 1 });
-        }
-        else
-        {
-            item.Quantity += 1;
-        }
-
-        Update(order);
-    }
-
-
-    public void RemoveProductFromOrder(Order order, Product product)
-    {
-        var item = order.Items.FirstOrDefault(item => item.ProductId == product.Id);
-        if (item is null)
-        {
-            return;
-        }
-        else if (item.Quantity == 1)
-        {
-            order.Items.Remove(item);
-        }
-        else
-        {
-            item.Quantity -= 1;
-        }
-
-        Update(order);
-    }
-
     public override IEnumerable<Order> GetAll()
     {
+        // По умолчанию не подгружает навигационные свойства, поэтому добавляем их
         return Get(includes:
         [
             source => source
@@ -83,6 +47,7 @@ internal class EFOrderRepository(OrderDbContext context) : EFGenericRepository<O
 
     public override async Task<Order?> GetByIdAsync(object? id)
     {
+        // По умолчанию не подгружает навигационные свойства, поэтому добавляем их
         return await _dbSet.Include(o => o.Items).FirstOrDefaultAsync(o => o.Id == (int)id!);
     }
 }

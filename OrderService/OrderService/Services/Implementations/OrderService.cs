@@ -6,7 +6,7 @@ using OrderService.Services.Interfaces;
 namespace OrderService.Services.Implementations;
 
 /// <summary>
-/// Сервиса изменения заказов
+/// Сервис управления заказами
 /// </summary>
 public class OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IUnitOfWork unitOfWork) : IOrderService
 {
